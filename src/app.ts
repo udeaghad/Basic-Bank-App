@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookiesParser from 'cookie-parser';
 import authsRoutes from './routes/authsRoutes';
+import depositRoutes from './routes/depositRoute';
 
 dotenv.config()
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(cookiesParser());
 
 app.use("/api/v1/auths", authsRoutes);
+app.use("/api/v1/accounts", depositRoutes);
 
 
 /**Error handler */

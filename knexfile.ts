@@ -1,4 +1,4 @@
-require('ts-node/register');
+// require('ts-node/register');
 const dotenv = require('dotenv')
 dotenv.config();
 

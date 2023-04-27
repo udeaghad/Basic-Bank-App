@@ -31,7 +31,7 @@ export const createAccount = async(req:Request, res:Response, next:NextFunction)
     })
 
 
-    if(response) res.status(201).json({message: `Account created successfully`})
+    if(response) res.status(201).json({message: `Account ${response} created successfully`})
     
   } catch (error) {
     next(error)

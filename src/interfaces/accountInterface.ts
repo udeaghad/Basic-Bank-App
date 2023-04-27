@@ -4,3 +4,10 @@ export interface IInfo {
   password: string;  
 
 }
+
+export interface IDeposit {
+  deposit: Number;
+  balance: Number;
+  remarks: String;
+  acct_id: String;
+}

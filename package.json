@@ -7,7 +7,8 @@
     "test": "jest",
     "dev": "nodemon ./src/index.ts",
     "start": "node ./build/index.js",
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "migrate": "knex migrate:make latest"
   },
   "repository": {
     "type": "git",

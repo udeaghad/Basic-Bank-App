@@ -1,3 +1,4 @@
 {
-  "ext": ".json, .yaml, .ts"
+  "ext": ".json, .yaml, .ts",
+  "ignore": "knexfile.js"
 }

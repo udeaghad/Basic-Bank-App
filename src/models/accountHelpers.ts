@@ -27,8 +27,19 @@ export const updateBalanceOnDeposit = async(id: String, amount: Number) => {
                               .where({id})
                               .select(['balance'])
                           })
-                          
-                          
+  return account
+}
 
+export const updateBalanceOnWithdraw = async(id: String, amount: Number) => {
+  const [account] = await db("accts")
+                          .where({id})
+                          .update({
+                            'balance': db.raw(`balance - ${amount}`)
+                          })
+                          .then(() => {
+                            return db('accts')
+                              .where({id})
+                              .select(['balance'])
+                          })
   return account
 }

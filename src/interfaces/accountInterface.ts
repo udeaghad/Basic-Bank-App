@@ -1,12 +1,18 @@
 export interface IInfo {
-  name: string;
-  email: string;
-  password: string;  
+  name: String;
+  email: String;
+  password: any;  
 
 }
 
 export interface IDeposit {
   deposit: Number;
+  balance: Number;
+  remarks: String;
+  acct_id: String;
+}
+export interface IWithdraw {
+  withdraw: Number;
   balance: Number;
   remarks: String;
   acct_id: String;

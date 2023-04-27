@@ -2,6 +2,7 @@ import express, {Request, Response, ErrorRequestHandler, Application} from 'expr
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookiesParser from 'cookie-parser';
+import authsRoutes from './routes/authsRoutes';
 
 dotenv.config()
 
@@ -12,6 +13,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use(cookiesParser());
+
+app.use("/api/v1/auths", authsRoutes)
 
 /**Error handler */
 

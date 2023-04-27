@@ -1,3 +1,4 @@
+require('ts-node/register');
 const dotenv = require('dotenv')
 dotenv.config();
 
@@ -6,7 +7,7 @@ dotenv.config();
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
  */
-export default {
+module.exports = {
 
   development: {
     client: 'mysql',

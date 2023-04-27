@@ -9,7 +9,7 @@ export const create = async(info: IInfo) => {
 export const findAccount = async(email: string) => {
   const [account] = await db("accts")
                             .where({email})
-                            .select('email');
+                            .select();
 
    return account
 }

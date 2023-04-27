@@ -14,7 +14,8 @@ app.use(express.json());
 
 app.use(cookiesParser());
 
-app.use("/api/v1/auths", authsRoutes)
+app.use("/api/v1/auths", authsRoutes);
+
 
 /**Error handler */
 

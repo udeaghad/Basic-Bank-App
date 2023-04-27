@@ -4,15 +4,12 @@ import jwt, { Secret } from "jsonwebtoken";
 const secretKey: Secret = String(process.env.JWT)
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) =>{
-  const token: string | null = req.cookies.cookies
+  const token: string | null = req.cookies.access_token
   if(!token) return {status: 404, message: "You are not authenticated!"}
 
-  // const decoded = jwt.verify(token, SecretKey)
-  // req.cookies.cookies = decoded;
-
-  jwt.verify(token, secretKey, (err, user) => {
+    jwt.verify(token, secretKey, (err, user) => {
     if(err) return {status: 403, message: "Token is invalid"}
-    req.cookies.cookies = user;
+    req.cookies.access_token = user;
     next();
   } )
 }

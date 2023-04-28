@@ -4,17 +4,17 @@ import { IDeposit, IWithdraw } from "../interfaces/accountInterface";
 
 
 export const createDepositTrxns = async(depositInfo: IDeposit) => {
-  const[id] = await db("trxns")
+  const[transaction] = await db("trxns")
                 .insert(depositInfo)
                 .then((id: any) => {
                   return db("trxns")
                     .whereIn('id',id)
                     .select()
                 })
-  return id;
+  return transaction;
 }
 export const createWithdrawTrxns = async(withdrawInfo: IWithdraw) => {
-  const[id] = await db("trxns")
+  const[transaction] = await db("trxns")
                 .insert(withdrawInfo)
                 .then((id: any) => {
                   return db("trxns as t")
@@ -22,7 +22,7 @@ export const createWithdrawTrxns = async(withdrawInfo: IWithdraw) => {
                     .whereIn('t.id',id)
                     .select(["t.*", "accts.name as Sender"])
                 })
-  return id;
+  return transaction;
 }
 
 export const searchHistory = async(id: string, startDate: string, endDate: string) => {

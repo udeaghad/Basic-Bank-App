@@ -31,7 +31,7 @@ export const createAccount = async(req:Request, res:Response, next:NextFunction)
     })
 
 
-    if(response) res.status(201).json({message: `Account ${response} created successfully`})
+    if(response) res.status(201).json({status: "Success", message: `Account ${response} created successfully`})
     
   } catch (error) {
     next(error)
@@ -40,18 +40,16 @@ export const createAccount = async(req:Request, res:Response, next:NextFunction)
 
 export const login = async(req: Request, res: Response, next: NextFunction) => {
 
-  
-
   const accountExist: null | IAccount= await findAccount(req.body.email)
 
-  if(!accountExist) return res.status(401).json({message: "Invalid Login Details" })
+  if(!accountExist) return res.status(401).json({ status: 'fail', message: "Invalid Login Details" })
 
   if(accountExist) {
     try {
       const { id, password, ...otherDetails} = accountExist;
       
       const validPassword = await bcrypt.compare(req.body.password, password);
-      if(!validPassword) return res.status(401).send("Invaid Login Details")
+      if(!validPassword) return res.status(401).json({status: "fail", message: "Invaid Login Details"})
 
       const token = jwt.sign({id}, secretKey)
 

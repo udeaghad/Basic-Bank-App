@@ -34,9 +34,12 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
 
 }
 
-export const sendMoney = async(req: Request, res: Response, next: NextFunction) => {
+export const sendMoney = async(req: Request, res: Response, next: NextFunction) => {  
  
   const { id, amount, remarks, ...otherInfo } = req.body
+
+  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
+
   try {
     
     const updatedBalance = await updateBalanceOnWithdraw(id, amount);
@@ -83,12 +86,16 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
 }
 
 export const searchTrxnsHistory = async(req: Request, res: Response, next: NextFunction) => {
+
   const { id, startDate, endDate } = req.body;
+
+  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
   
   try {
     
-    if(!startDate) return res.status(400).send("You need to enter the startDate and endDate in the query")
-  
+    if(!startDate) return res.status(400).send("You need to enter the startDate")
+    if(!endDate) return res.status(400).send("You need to enter the endDate")
+    
     const report =  await searchHistory(id, startDate, endDate)
   
     res.status(200).json({ status: 'Success', message: 'Transaction Successful', data: report})

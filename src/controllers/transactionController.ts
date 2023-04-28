@@ -1,12 +1,21 @@
-import {Request, Response, NextFunction} from "express";
+import {Request, Response, NextFunction, response} from "express";
 import axios from "axios";
 import qs from 'qs'
 import { updateBalanceOnDeposit, updateBalanceOnWithdraw } from "../models/accountHelpers";
 import { createDepositTrxns, createWithdrawTrxns, searchHistory } from "../models/transactionsHelper";
 
-export const receiveDeposit = async(req: Request, res: Response, next: NextFunction) => {
+const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
 
+export const receiveDeposit = async(req: Request, res: Response, next: NextFunction) => {
+ 
   const { id, amount, remarks, ...otherInfo } = req.body
+
+  const authorization = req.headers.authorization?.split(' ')[1]
+  const tokenSuffix = req.headers.authorization?.split(' ')[0]
+
+  if(authorization !== '12345' || authorization?.length !== 5 || tokenSuffix !== 'Bearer' ) {
+    return res.status(400).json({status: 'fail', message: "Invalid token"})
+  } 
 
   try {
     
@@ -21,12 +30,25 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
       remarks,
       ...otherInfo
     })
-
-     const { balance, currentBal, ...otherDepositInfo} = createTrxns; 
-
+    
     if(!createTrxns) return res.status(400).json({status: 'fail', message: "Transaction not completed", data: null})
     
-    res.status(200).json({status: 'Success', message: 'Transactions Successful', data: otherDepositInfo})
+    const { balance, currentBal, ...otherDepositInfo} = createTrxns; 
+     
+    const responseMessage = {
+      status: 'Success', 
+      message: 'Transactions Successful', 
+      data: otherDepositInfo 
+    }
+    
+    try {
+       await axios.post(webhookURL, responseMessage)
+  
+    } catch (error: any) {
+      throw Error(error)
+    }
+
+    res.status(200).json(responseMessage)
   
   } catch (error) {
     next(error)
@@ -55,17 +77,33 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
     })
   
     if(!createTrxns) return res.status(400).json({status: 'fail', message: "Transaction not complete", data: null})
+
+    const { balance, currentBal, ...otherDepositInfo} = createTrxns;
+
+    const responseMessage = {
+      status: 'Pending', 
+      message: 'Transactions Pending', 
+      data: otherDepositInfo 
+    }
+    
+    try {
+      await axios.post(webhookURL, responseMessage)
+  
+    } catch (error: any) {
+      throw Error(error)
+    }
       
     const data = qs.stringify({
       amount,       
       'narration': `Transfer from ${createTrxns.Sender}`,
       ...otherInfo
     });
-    const config = {
+
+      const config = {
       method: 'post',
       url: 'https://integrations.getravenbank.com/v1/transfers/create',
-      headers: { 
-        Authorization: 'Bearer RVSEC-TESTa719c38c54953cd5de4c2a98b2fbee273988420b5a917193658020fc6077fca77f801665fd852fc0eabb7229cf8ce23a-1682653183722'
+      headers: {         
+        'Authorization': process.env.RAVEN_SECRET        
       },
       data : data
     };
@@ -73,10 +111,11 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
     axios(config)
     .then((response: any) => {
       // console.log(JSON.stringify(response.data));
+      
       res.status(200).json(response.data)
     })
     .catch((error: any) => {
-      console.log(error);
+      next(error)
              
     });
 

@@ -2,7 +2,7 @@ import {Request, Response, NextFunction, response} from "express";
 import axios from "axios";
 import qs from 'qs'
 import { updateBalanceOnDeposit, updateBalanceOnWithdraw } from "../models/accountHelpers";
-import { createDepositTrxns, createWithdrawTrxns, searchHistory } from "../models/transactionsHelper";
+import { createDepositTrxns, createWithdrawTrxns, getTransactionDetails, searchHistory } from "../models/transactionsHelper";
 
 const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
 
@@ -142,4 +142,21 @@ export const searchTrxnsHistory = async(req: Request, res: Response, next: NextF
     next(error)
   }
   
+}
+
+export const getTransaction = async(req: Request, res: Response, next: NextFunction) => {
+  
+  const {id, trxns_id } = req.params
+
+  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
+
+  try {
+    const transaction = await getTransactionDetails(trxns_id)
+
+    res.status(200).json({status: 'Success', message: 'Transaction Successfull', data: transaction})
+    
+  } catch (error) {
+    next(error)
+  }
+
 }

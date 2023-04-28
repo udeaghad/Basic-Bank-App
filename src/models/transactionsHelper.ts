@@ -17,9 +17,10 @@ export const createWithdrawTrxns = async(withdrawInfo: IWithdraw) => {
   const[id] = await db("trxns")
                 .insert(withdrawInfo)
                 .then((id: any) => {
-                  return db("trxns")
-                    .whereIn('id',id)
-                    .select()
+                  return db("trxns as t")
+                    .join("accts", "t.acct_id", "=", "accts.id" )
+                    .whereIn('t.id',id)
+                    .select(["t.*", "accts.name as Sender"])
                 })
   return id;
 }

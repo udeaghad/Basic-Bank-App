@@ -1,8 +1,8 @@
 import {Request, Response, NextFunction} from "express";
 import { updateBalanceOnDeposit, updateBalanceOnWithdraw } from "../models/accountHelpers";
-import { createDepositTrxns, createWithdrawTrxns } from "../models/transactionsHelper";
+import { createDepositTrxns, createWithdrawTrxns, searchHistory } from "../models/transactionsHelper";
 
-export const createDeposit = async(req: Request, res: Response, next: NextFunction) => {
+export const receiveDeposit = async(req: Request, res: Response, next: NextFunction) => {
   
   const { id, amount, remarks } = req.body
 
@@ -18,7 +18,7 @@ export const createDeposit = async(req: Request, res: Response, next: NextFuncti
   if(createTrxns) return res.status(200).json(createTrxns)
 }
 
-export const createWithdraw = async(req: Request, res: Response, next: NextFunction) => {
+export const sendMoney = async(req: Request, res: Response, next: NextFunction) => {
  
   const { id, amount, remarks } = req.body
 
@@ -32,4 +32,20 @@ export const createWithdraw = async(req: Request, res: Response, next: NextFunct
   })
 
   if(createTrxns) return res.status(200).json(createTrxns)
+}
+
+export const searchTrxnsHistory = async(req: Request, res: Response, next: NextFunction) => {
+  const { id, startDate, endDate } = req.body;
+  
+  try {
+    
+    if(!startDate) return res.status(400).send("You need to enter the startDate and endDate in the query")
+  
+    const report =  await searchHistory(id, startDate, endDate)
+  
+    res.status(200).json(report)
+  } catch (error) {
+    next(error)
+  }
+  
 }

@@ -24,3 +24,13 @@ export const createWithdrawTrxns = async(withdrawInfo: IWithdraw) => {
   return id;
 }
 
+export const searchHistory = async(id: string, startDate: string, endDate: string) => {
+  const history = await db("trxns as t")
+                  .join("accts", "t.acct_id", "=", "accts.id")
+                  .select(["t.*", "accts.name", "accts.balance as currentBal"])
+                  .where("acct_id", id)
+                  .whereRaw("date_format(t.created_at, '%Y-%m-%d') BETWEEN ? AND ?", [startDate, endDate])
+                  .orderBy('t.created_at', 'asc')
+              
+  return history;
+}

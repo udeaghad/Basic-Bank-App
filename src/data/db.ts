@@ -1,5 +1,5 @@
-const config = require('../../knexfile')
-const knex = require('knex')
-const db = knex(config.development)
+const dbEngine = process.env.Environment || 'development';
+const config = require('../../knexfile')[dbEngine]
+const db = require('knex')(config)
 
 export default db;

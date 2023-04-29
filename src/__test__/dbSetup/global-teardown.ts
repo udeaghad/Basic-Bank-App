@@ -7,7 +7,7 @@ const portNumber: number = Number(process.env.DB_PORT)
 
 const database = 'test_raven_db'
 
-export const tearDownDatabase = async () => {
+const tearDownDatabase = async () => {
   const knex = Knex({
     client: 'mysql',
     connection: {
@@ -22,6 +22,17 @@ export const tearDownDatabase = async () => {
 
   try {
     await knex.raw(`DROP DATABASE IF EXISTS ${database}`)
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
+  }
+}
+
+module.exports = async () => {
+  try {
+    await tearDownDatabase()
+    
+    console.log('Test database created successfully')
   } catch (error) {
     console.log(error)
     process.exit(1)

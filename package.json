@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/udeaghad/RavenPayTest#readme",
   "devDependencies": {
+    "@jest/types": "^29.5.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.13",

@@ -8,7 +8,7 @@ const portNumber: number = Number(process.env.DB_PORT)
 const database = 'test_raven_db'
 
 // Create the database
-export const createTestDatabase = async() => {
+const createTestDatabase = async() => {
   const knex = Knex({
     client: 'mysql',
     connection: {
@@ -32,7 +32,7 @@ export const createTestDatabase = async() => {
 }
 
 // Seed the database with schema and data
-export const seedTestDatabase = async() => {
+const seedTestDatabase = async() => {
   const knex = Knex({
     client: 'mysql',
     connection: {
@@ -51,5 +51,16 @@ export const seedTestDatabase = async() => {
     throw new Error(error)
   } finally {
     await knex.destroy()
+  }
+}
+
+module.exports = async () => {
+  try {
+    await createTestDatabase()
+    await seedTestDatabase()
+    console.log('Test database created successfully')
+  } catch (error) {
+    console.log(error)
+    process.exit(1)
   }
 }

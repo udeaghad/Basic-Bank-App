@@ -3,6 +3,7 @@ import axios from "axios";
 import qs from 'qs'
 import { updateBalanceOnDeposit, updateBalanceOnWithdraw } from "../models/accountHelpers";
 import { createDepositTrxns, createWithdrawTrxns, getTransactionDetails, searchHistory } from "../models/transactionsHelper";
+import { config } from "dotenv";
 
 const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
 
@@ -45,7 +46,7 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
        await axios.post(webhookURL, responseMessage)
   
     } catch (error: any) {
-      throw Error(error)
+      next(error)
     }
 
     res.status(200).json(responseMessage)
@@ -90,15 +91,16 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
       await axios.post(webhookURL, responseMessage)
   
     } catch (error: any) {
-      throw Error(error)
+      next(error)
     }
       
-    const data = qs.stringify({
+    const data = qs.stringify ({
       amount,       
       'narration': `Transfer from ${createTrxns.Sender}`,
       ...otherInfo
     });
 
+  
       const config = {
       method: 'post',
       url: 'https://integrations.getravenbank.com/v1/transfers/create',
@@ -108,16 +110,17 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
       data : data
     };
     
-    axios(config)
-    .then((response: any) => {
-      // console.log(JSON.stringify(response.data));
-      
-      res.status(200).json(response.data)
-    })
-    .catch((error: any) => {
-      next(error)
-             
-    });
+    const ravenResponse = await axios(config)
+      .then((response: any) => {
+        return (JSON.stringify(response.data)); 
+      })
+      .catch((error: any) => {
+        console.log(error)
+        next(error)             
+      });
+
+    axios.post(webhookURL, ravenResponse)
+    res.status(200).json(ravenResponse)
 
   } catch (error) {
     next(error)
@@ -125,7 +128,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
 }
 
 export const searchTrxnsHistory = async(req: Request, res: Response, next: NextFunction) => {
-
+  
   const { id, startDate, endDate } = req.body;
 
   if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})

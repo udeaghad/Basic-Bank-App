@@ -3,6 +3,7 @@ import jwt, {Secret} from 'jsonwebtoken';
 import { create, findAccount} from "../models/accountHelpers";
 import { IInfo } from "../interfaces/accountInterface";
 import bcrypt from 'bcryptjs';
+import hashPassword from "../utils/hashPassword";
 
 
 interface IAccount extends IInfo {
@@ -14,24 +15,21 @@ const secretKey: Secret = String(process.env.JWT);
 
 export const createAccount = async(req:Request, res:Response, next:NextFunction) => {
   const { name, email, password, confirmPassword} = req.body;
-  if (password !== confirmPassword) res.status(401).json({message: "Password mismatch"})
+  if (password !== confirmPassword) res.status(401).json({status: "fail", message: "Password mismatch"})
   
   const accountExist: null | IAccount= await findAccount(email)
-  if(accountExist) return res.status(409).json("Account already exist")
-
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
+  if(accountExist) return res.status(409).json({status: "Success", message: "Account already exist"})
 
   try {
      
     const response = await create({
       name,
       email,
-      password: hash
+      password: hashPassword(password)
     })
 
 
-    if(response) res.status(201).json({status: "Success", message: `Account ${response} created successfully`})
+    if(response) res.status(201).json({status: "Success", message: `Account created successfully`})
     
   } catch (error) {
     next(error)

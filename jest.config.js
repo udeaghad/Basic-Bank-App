@@ -1,10 +1,17 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  verbose: true,
-  forceExit: true,
   clearMocks: true,
-  resetMocks: true,
-  restoreMocks: true,
-};
+  moduleFileExtensions: ['ts'],
+  roots: ['<rootDir>'],
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.ts?$': 'ts-jest',
+  },
+  setupFilesAfterEnv: ['jest-extended'],
+  globals: {
+    'ts-jest': {
+      diagnostics: false,
+    },
+  },
+  globalSetup: '<rootDir>/tests/global-setup.ts',
+  globalTeardown: '<rootDir>/tests/global-teardown.ts',
+}

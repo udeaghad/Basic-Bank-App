@@ -1,5 +1,4 @@
-// require('ts-node/register');
-const dotenv = require('dotenv')
+import dotenv from 'dotenv'
 dotenv.config();
 
 // Update with your config settings.

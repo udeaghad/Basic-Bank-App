@@ -8,7 +8,7 @@
     "dev": "nodemon ./src/index.ts",
     "start": "node ./build/index.js",
     "build": "tsc -p .",
-    "migrate": "knex migrate:latest"
+    "migrate": "knex --knexfile ./src/data/knexfile.ts migrate:latest"
   },
   "repository": {
     "type": "git",
@@ -50,6 +50,7 @@
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.2",
     "mysql": "^2.18.1",
+    "mysql2": "^3.2.4",
     "qs": "^6.11.1"
   }
 }

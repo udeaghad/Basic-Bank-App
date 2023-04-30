@@ -9,7 +9,7 @@ dotenv.config();
 module.exports = {
 
   development: {
-    client: 'mysql',
+    client: 'mysql2',
     connection: {
       database: process.env.DB_NAME,
       user: process.env.DB_USER,
@@ -19,7 +19,7 @@ module.exports = {
       
     },
     migrations: {
-      directory: __dirname + '/src/data/migrations',
+      directory: 'migrations',
       extension: 'ts',
       loadExtensions: ['.ts', '.js']
     } 

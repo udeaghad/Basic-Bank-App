@@ -4,9 +4,9 @@ import app from '../../app';
 
 describe('Transactions', () => {
   
-  afterEach(() => {
-    let config = require('../../../knexfile')
-      let db = Knex(config.test)
+  afterAll(() => {
+    let config = require('../../data/knexfile')
+    let db = Knex(config.test)
     db.destroy()
   })
     
@@ -19,7 +19,7 @@ describe('Transactions', () => {
     
         const newAccunt = { 
           name: 'James Brown', 
-          email: 'james10@example.com', 
+          email: 'james20@example.com', 
           password: '12345',
           confirmPassword: '12345',              
         }
@@ -28,7 +28,7 @@ describe('Transactions', () => {
         //login
     
          const userLoginDetails = {
-          email: 'james10@example.com', 
+          email: 'james20@example.com', 
           password: '12345',
         }
     

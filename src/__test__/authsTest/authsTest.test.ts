@@ -7,7 +7,7 @@ describe('Authentication', () => {
   
   
   afterAll(() => {
-    let config = require('../../../knexfile')
+    let config = require('../../data/knexfile')
     let db = Knex(config.test)
     db.destroy()
   })

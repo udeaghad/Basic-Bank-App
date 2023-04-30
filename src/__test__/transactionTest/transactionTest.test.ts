@@ -65,7 +65,7 @@ describe('Transactions', () => {
                                   .set('Authorization', 'Bearer 12345')
       
       expect(statusCode).toBe(200)
-      expect(body.status).toBe("Success")
+      expect(body.status).toBe('Success')
       expect(body.message).toBe('Transactions Successful')
       expect(body.data.deposit).toBe(2500)
       expect(body.data.withdraw).toBe(0)
@@ -98,7 +98,7 @@ describe('Transactions', () => {
                                   .set('Authorization', '12345')
   
       expect(statusCode).toBe(400)
-      expect(body.status).toBe("fail")
+      expect(body.status).toBe('fail')
       expect(body.message).toBe('Invalid token')    
   
     })
@@ -123,7 +123,7 @@ describe('Transactions', () => {
                                   .set('Authorization', 'Bearer 123456')
   
       expect(statusCode).toBe(400)
-      expect(body.status).toBe("fail")
+      expect(body.status).toBe('fail')
       expect(body.message).toBe('Invalid token')    
   
     })
@@ -147,7 +147,7 @@ describe('Transactions', () => {
                                   .send(depositDetails)
   
       expect(statusCode).toBe(400)
-      expect(body.status).toBe("fail")
+      expect(body.status).toBe('fail')
       expect(body.message).toBe('Invalid token')    
   
     })
@@ -156,15 +156,15 @@ describe('Transactions', () => {
   describe('Send Transfer', () => {
     it('Should send transfer successfully', async() => {
       const transferDetails = {
-        "id": accountNumber,
-        "amount":"10",
-        "remarks":"Trf to Clark",
-        "bank_code": "044",
-        "bank": "Access bank",
-        "account_number": "0690000031",
-        "account_name": "Pastor Bright",
-        "reference": "9967998",
-        "currency" : "NGN"
+        id: accountNumber,
+        amount:"10",
+        remarks:"Trf to Clark",
+        bank_code: "044",
+        bank: "Access bank",
+        account_number: "0690000031",
+        account_name: "Pastor Bright",
+        reference: "9967998",
+        currency: "NGN"
       }
 
       const {statusCode} = await request(app)
@@ -177,15 +177,15 @@ describe('Transactions', () => {
 
     it('Should return error if amount is higher than user\'s balance', async() => {
       const transferDetails = {
-        "id": accountNumber,
-        "amount":"20000",
-        "remarks":"Trf to Clark",
-        "bank_code": "044",
-        "bank": "Access bank",
-        "account_number": "0690000031",
-        "account_name": "Pastor Bright",
-        "reference": "9967998",
-        "currency" : "NGN"
+        id: accountNumber,
+        amount:"20000",
+        remarks:"Trf to Clark",
+        bank_code: "044",
+        bank: "Access bank",
+        account_number: "0690000031",
+        account_name: "Pastor Bright",
+        reference: "9967998",
+        currency : "NGN"
       }
 
       const {statusCode, body} = await request(app)
@@ -237,7 +237,7 @@ describe('Transactions', () => {
           account_name: "Chris Olodo",
           reference: "52546874",
           currency: "NGN",
-          created_at: '2023-01-01'
+          created_at: "2023-01-01"
         }
         const depositDetails2 = {
           id: accountNumber,
@@ -249,7 +249,7 @@ describe('Transactions', () => {
           account_name: "Chris Olodo",
           reference: "52546874",
           currency: "NGN",
-          created_at: '2023-02-01'
+          created_at: "2023-02-01"
         }
         const depositDetails3 = {
           id: accountNumber,
@@ -261,7 +261,7 @@ describe('Transactions', () => {
           account_name: "Chris Olodo",
           reference: "52546874",
           currency: "NGN",
-          created_at: '2023-03-01'
+          created_at: "2023-03-01"
         }
     
         await request(app)

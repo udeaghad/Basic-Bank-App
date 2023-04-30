@@ -1,8 +1,8 @@
-import {Request, Response, NextFunction} from "express";
-import axios from "axios";
+import {Request, Response, NextFunction} from 'express';
+import axios from 'axios';
 import qs from 'qs'
-import { checkBalance, updateBalanceOnDeposit, updateBalanceOnWithdraw } from "../models/accountHelpers";
-import { createDepositTrxns, createWithdrawTrxns, getTransactionDetails, searchHistory } from "../models/transactionsHelper";
+import { checkBalance, updateBalanceOnDeposit, updateBalanceOnWithdraw } from '../models/accountHelpers';
+import { createDepositTrxns, createWithdrawTrxns, getTransactionDetails, searchHistory } from '../models/transactionsHelper';
 
 
 const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
@@ -15,14 +15,14 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
   const tokenSuffix = req.headers.authorization?.split(' ')[0]
 
   if(authorization !== '12345' || authorization?.length !== 5 || tokenSuffix !== 'Bearer' ) {
-    return res.status(400).json({status: 'fail', message: "Invalid token"})
+    return res.status(400).json({status: 'fail', message: 'Invalid token'})
   } 
 
   try {
     
     const updatedBalance = await updateBalanceOnDeposit(id, amount);
   
-    if(!updatedBalance) return res.status(400).json({status: 'fail', message: "Balance could not be updated"})
+    if(!updatedBalance) return res.status(400).json({status: 'fail', message: 'Balance could not be updated'})
   
     const createTrxns = await createDepositTrxns({
       deposit: amount,
@@ -32,7 +32,7 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
       ...otherInfo
     })
     
-    if(!createTrxns) return res.status(400).json({status: 'fail', message: "Transaction not completed", data: null})
+    if(!createTrxns) return res.status(400).json({status: 'fail', message: 'Transaction not completed', data: null})
     
     const { balance, currentBal, ...otherDepositInfo} = createTrxns; 
      
@@ -61,7 +61,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
  
   const { id, amount, remarks, ...otherInfo } = req.body
   
-  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: "You are not authorized performing transaction"})
+  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: 'You are not authorized performing transaction'})
   
   try {
     const checkedAccountBalance = await checkBalance(id)
@@ -70,7 +70,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
     
     const updatedBalance = await updateBalanceOnWithdraw(id, amount);
     
-    if(!updatedBalance) return res.status(400).json({status: 'fail', message: "Balance could not be updated", data: null})
+    if(!updatedBalance) return res.status(400).json({status: 'fail', message: 'Balance could not be updated', data: null})
     
     
     const createTrxns = await createWithdrawTrxns({
@@ -81,7 +81,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
       ...otherInfo
     })
   
-    if(!createTrxns) return res.status(400).json({status: 'fail', message: "Transaction not complete", data: null})
+    if(!createTrxns) return res.status(400).json({status: 'fail', message: 'Transaction not complete', data: null})
 
     const { balance, currentBal, ...otherDepositInfo} = createTrxns;
 
@@ -135,12 +135,12 @@ export const searchTrxnsHistory = async(req: Request, res: Response, next: NextF
   
   const { id, startDate, endDate } = req.body;
 
-  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
+  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: 'You need to login before performing transaction'})
   
   try {
     
-    if(!startDate) return res.status(400).send("You need to enter the startDate")
-    if(!endDate) return res.status(400).send("You need to enter the endDate")
+    if(!startDate) return res.status(400).send('You need to enter the startDate')
+    if(!endDate) return res.status(400).send('You need to enter the endDate')
     
     const report =  await searchHistory(id, startDate, endDate)
   
@@ -155,7 +155,7 @@ export const getTransaction = async(req: Request, res: Response, next: NextFunct
   
   const {id, trxns_id } = req.params
 
-  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
+  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: 'You need to login before performing transaction'})
 
   try {
     const transaction = await getTransactionDetails(trxns_id)

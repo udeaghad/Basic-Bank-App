@@ -2,14 +2,14 @@ import db from '../data/db';
 import { IInfo } from '../interfaces/accountInterface';
 
 export const create = async(info: IInfo) => {
-  const [id] = await db("accts")
+  const [id] = await db('accts')
                     .insert(info)
                     .select(['id'])
   return id;  
 }
 
 export const findAccount = async(email: String) => {
-  const [account] = await db("accts")
+  const [account] = await db('accts')
                             .where({email})
                             .select();
 
@@ -17,7 +17,7 @@ export const findAccount = async(email: String) => {
 }
 
 export const updateBalanceOnDeposit = async(id: String, amount: Number) => {
-  const [account] = await db("accts")
+  const [account] = await db('accts')
                           .where({id})
                           .update({
                             'balance': db.raw(`balance + ${amount}`)
@@ -31,7 +31,7 @@ export const updateBalanceOnDeposit = async(id: String, amount: Number) => {
 }
 
 export const updateBalanceOnWithdraw = async(id: string, amount: number) => {
-  const [account] = await db("accts")
+  const [account] = await db('accts')
                           .where({id})
                           .update({
                             'balance': db.raw(`balance - ${amount}`)

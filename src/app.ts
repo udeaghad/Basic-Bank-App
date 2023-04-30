@@ -15,8 +15,8 @@ app.use(express.json());
 
 app.use(cookiesParser());
 
-app.use("/api/v1/auths", authsRoutes);
-app.use("/api/v1/accounts", transactioRoutes);
+app.use('/api/v1/auths', authsRoutes);
+app.use('/api/v1/accounts', transactioRoutes);
 
 
 
@@ -27,7 +27,7 @@ const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   res.json({
     success: false,
     status: error.status || 400,
-    message: error.message || "Sorry! something went wrong"
+    message: error.message || 'Sorry! something went wrong'
   })
   next();
 }

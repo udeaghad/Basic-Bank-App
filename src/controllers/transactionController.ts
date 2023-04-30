@@ -60,8 +60,8 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
 export const sendMoney = async(req: Request, res: Response, next: NextFunction) => {  
  
   const { id, amount, remarks, ...otherInfo } = req.body
-
-  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You are not authorized performing transaction"})
+  
+  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: "You are not authorized performing transaction"})
   
   try {
     const checkedAccountBalance = await checkBalance(id)
@@ -135,7 +135,7 @@ export const searchTrxnsHistory = async(req: Request, res: Response, next: NextF
   
   const { id, startDate, endDate } = req.body;
 
-  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
+  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
   
   try {
     
@@ -155,7 +155,7 @@ export const getTransaction = async(req: Request, res: Response, next: NextFunct
   
   const {id, trxns_id } = req.params
 
-  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
+  if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
 
   try {
     const transaction = await getTransactionDetails(trxns_id)

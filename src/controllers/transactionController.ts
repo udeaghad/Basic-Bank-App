@@ -1,9 +1,9 @@
 import {Request, Response, NextFunction, response} from "express";
 import axios from "axios";
 import qs from 'qs'
-import { updateBalanceOnDeposit, updateBalanceOnWithdraw } from "../models/accountHelpers";
+import { checkBalance, updateBalanceOnDeposit, updateBalanceOnWithdraw } from "../models/accountHelpers";
 import { createDepositTrxns, createWithdrawTrxns, getTransactionDetails, searchHistory } from "../models/transactionsHelper";
-import { config } from "dotenv";
+
 
 const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
 
@@ -61,13 +61,17 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
  
   const { id, amount, remarks, ...otherInfo } = req.body
 
-  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You need to login before performing transaction"})
-
+  if(req.cookies.access_token.id !== id) return res.status(401).json({status: 'Unauthorized', message: "You are not authorized performing transaction"})
+  
   try {
+    const checkedAccountBalance = await checkBalance(id)
+     
+    if(checkedAccountBalance.balance < amount ) return res.status(400).json({status: 'fail', message: 'Insufficient balance', data: null})
     
     const updatedBalance = await updateBalanceOnWithdraw(id, amount);
     
     if(!updatedBalance) return res.status(400).json({status: 'fail', message: "Balance could not be updated", data: null})
+    
     
     const createTrxns = await createWithdrawTrxns({
       withdraw: amount,

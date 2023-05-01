@@ -22,8 +22,8 @@ To get a local copy up and running follow these simple steps.
 - `$ git --version`
 - You can check if node is installed by running the following command in the terminal.
 - `$ node --version`
-- Ensure you have Mysql database installed(You can click [here](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) to install)
-- Ensure you knex installed(You can click [here](https://knexjs.org/) for the documentations)
+- Ensure you have Mysql database installed(You can click [here](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/) for the documentations and installation)
+- Ensure you knex installed(You can click here [here](https://knexjs.org/) for the documentations and installation)
 
 
 # Usage
@@ -44,8 +44,6 @@ To get a local copy up and running follow these simple steps.
   - RAVEN_SECRET 
   - ENVIRONMENT = test(Set this to run integraton testing)
 - Create your database and connect it on the knexfile.ts
-  - Go to the file `/src/data/createDB.ts
-  - Update the file with your MySql details
   - Run `npm run createDB`
 - Run `npm run migrate` to migrate the table columns and their properties to your database
 - Run `npm run dev` to start the application

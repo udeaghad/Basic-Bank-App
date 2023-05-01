@@ -45,7 +45,7 @@ export const login = async(req: Request, res: Response, next: NextFunction) => {
   if(accountExist) {
     try {
       const { id, password, ...otherDetails} = accountExist;
-      console.log(id)
+      
       const validPassword = await bcrypt.compare(req.body.password, password);
       if(!validPassword) return res.status(401).json({status: 'fail', message: 'Invalid Login Details'})
 

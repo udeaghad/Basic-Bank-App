@@ -7,8 +7,8 @@ import hashPassword from '../utils/hashPassword';
 
 
 interface IAccount extends IInfo {
-  id: string;
-  balance: number;  
+  id: String;
+  balance: Number;  
 }
 
 const secretKey: Secret = String(process.env.JWT);

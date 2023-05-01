@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Update with your config settings.
+ 
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -15,7 +16,7 @@ module.exports = {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
+      port: Number(process.env.DB_PORT)
       
     },
     migrations: {

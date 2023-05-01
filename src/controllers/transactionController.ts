@@ -3,6 +3,7 @@ import axios from 'axios';
 import qs from 'qs'
 import { checkBalance, updateBalanceOnDeposit, updateBalanceOnWithdraw } from '../models/accountHelpers';
 import { createDepositTrxns, createWithdrawTrxns, getTransactionDetails, searchHistory } from '../models/transactionsHelper';
+import { IDeposit, IWithdraw } from '../interfaces/accountInterface';
 
 
 const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
@@ -24,7 +25,7 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
   
     if(!updatedBalance) return res.status(400).json({status: 'fail', message: 'Balance could not be updated'})
   
-    const createTrxns = await createDepositTrxns({
+    const createTrxns: IDeposit = await createDepositTrxns({
       deposit: amount,
       balance: updatedBalance.balance,
       acct_id: id,
@@ -69,7 +70,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
   if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: 'You are not authorized performing transaction'})
   
   try {
-    const checkedAccountBalance = await checkBalance(id)
+    const checkedAccountBalance: { balance: Number } = await checkBalance(id)
      
     if(checkedAccountBalance.balance < amount ) return res.status(400).json({status: 'fail', message: 'Insufficient balance', data: null})
     
@@ -78,7 +79,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
     if(!updatedBalance) return res.status(400).json({status: 'fail', message: 'Balance could not be updated', data: null})
     
     
-    const createTrxns = await createWithdrawTrxns({
+    const createTrxns: IWithdraw = await createWithdrawTrxns({
       withdraw: amount,
       balance: updatedBalance.balance,
       acct_id: id,

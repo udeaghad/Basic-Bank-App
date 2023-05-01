@@ -16,6 +16,8 @@ export interface IDeposit {
   account_name: String 
   reference: Number;
   currency: String;
+  currentBal?: Number;
+
 }
 export interface IWithdraw {
   withdraw: Number;
@@ -28,4 +30,6 @@ export interface IWithdraw {
   account_name: String 
   reference: Number;
   currency: String;
+  currentBal?: Number;
+  Sender?: String;
 }

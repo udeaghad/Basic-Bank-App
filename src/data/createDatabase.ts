@@ -1,7 +1,10 @@
 const Knex = require('knex');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
 
-const databaseName = process.env.DB_NAME;
+dotenv.config()
+
+const databaseName = process.env.DB_NAME
+const port = Number(process.env.DB_PORT)
 
 const main = async() => {
   let knex = Knex({
@@ -10,7 +13,7 @@ const main = async() => {
       user: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
+      port
     }
   })
 
@@ -25,9 +28,6 @@ const main = async() => {
   } finally {
     await knex.destroy()
   }
-  
-  
-
 }
 
 main().catch(console.error) 

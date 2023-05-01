@@ -9,7 +9,7 @@ const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
 
 export const receiveDeposit = async(req: Request, res: Response, next: NextFunction) => {
  
-  const { id, amount, remarks, ...otherInfo } = req.body
+  const { id, amount, remarks, bank_code, bank, account_number, account_name, reference, currency } = req.body
 
   const authorization = req.headers.authorization?.split(' ')[1]
   const tokenSuffix = req.headers.authorization?.split(' ')[0]
@@ -28,8 +28,13 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
       deposit: amount,
       balance: updatedBalance.balance,
       acct_id: id,
-      remarks,
-      ...otherInfo
+      remarks, 
+      bank_code, 
+      bank, 
+      account_number, 
+      account_name, 
+      reference, 
+      currency,
     })
     
     if(!createTrxns) return res.status(400).json({status: 'fail', message: 'Transaction not completed', data: null})
@@ -59,7 +64,7 @@ export const receiveDeposit = async(req: Request, res: Response, next: NextFunct
 
 export const sendMoney = async(req: Request, res: Response, next: NextFunction) => {  
  
-  const { id, amount, remarks, ...otherInfo } = req.body
+  const { id, amount, remarks, bank_code, bank, account_number, account_name, reference, currency } = req.body
   
   if(req.cookies.access_token.id !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: 'You are not authorized performing transaction'})
   
@@ -78,7 +83,12 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
       balance: updatedBalance.balance,
       acct_id: id,
       remarks,
-      ...otherInfo
+      bank_code, 
+      bank, 
+      account_number, 
+      account_name, 
+      reference, 
+      currency,
     })
   
     if(!createTrxns) return res.status(400).json({status: 'fail', message: 'Transaction not complete', data: null})
@@ -101,7 +111,12 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
     const data = qs.stringify ({
       amount,       
       'narration': `Transfer from ${createTrxns.Sender}`,
-      ...otherInfo
+      bank_code, 
+      bank, 
+      account_number, 
+      account_name, 
+      reference, 
+      currency,
     });
 
   

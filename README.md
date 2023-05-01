@@ -34,12 +34,12 @@ To get a local copy up and running follow these simple steps.
 - `$ cd RavenPayTest `
 - Run `npm install`
 - create an .env file and update the following environmental variables:
-  - PORT
-  - DB_HOST
-  - DB_USER
-  - DB_PASSWORD
-  - DB_NAME(Please ensure your create this database in my MySQL)
-  - DB_PORT = 3306
+  - PORT - the port where your serve will be running
+  - DB_HOST - Mysql localhost
+  - DB_USER - Mysql username
+  - DB_PASSWORD - Mysql password
+  - DB_NAME(Please ensure your create this database in my MySQL) - Mysql database name
+  - DB_PORT - Mysql database port
   - JWT
   - RAVEN_SECRET 
   - ENVIRONMENT = test(Set this to run integraton testing)

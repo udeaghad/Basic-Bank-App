@@ -2,6 +2,7 @@ import request from 'supertest';
 import Knex from 'knex';
 import app from '../../app';
 
+
 describe('Transactions', () => {
   
   afterAll(() => {
@@ -282,8 +283,8 @@ describe('Transactions', () => {
 
         const searchParam = {
           id: accountNumber,
-          startDate: '2023-02-01',
-          endDate: '2023-03-01'
+          startDate: '2023-01-01',
+          endDate: '2023-05-05'
         }
 
         const {statusCode, body} = await request(app)

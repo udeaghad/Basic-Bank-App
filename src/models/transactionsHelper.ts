@@ -25,7 +25,7 @@ export const createWithdrawTrxns = async(withdrawInfo: IWithdraw) => {
   return transaction;
 }
 
-export const searchHistory = async(id: String, startDate: String, endDate: String) => {
+export const searchHistory = async(id: string, startDate: string, endDate: string) => {
   const history = await db('trxns as t')
                           .join('accts', 't.acct_id', '=', 'accts.id')
                           .select(['t.*', 'accts.name', 'accts.balance as currentBal'])

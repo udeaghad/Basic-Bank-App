@@ -271,22 +271,22 @@ describe('Transactions', () => {
           updated_at: "2023-03-01"
         }
     
-       const res1 =  await request(app)
+       await request(app)
           .post('/api/v1/accounts/deposit/receiveMoney')
           .send(depositDetails1)
           .set('Authorization', 'Bearer 12345')
 
-        const res2 = await request(app)
+      await request(app)
           .post('/api/v1/accounts/deposit/receiveMoney')
           .send(depositDetails2)
           .set('Authorization', 'Bearer 12345')
 
-        const res3 = await request(app)
+      await request(app)
           .post('/api/v1/accounts/deposit/receiveMoney')
           .send(depositDetails3)
           .set('Authorization', 'Bearer 12345')
 
-     console.log(res1.body.data)
+    
         const searchParam = {
           id: accountNumber,
           startDate: '2023-02-01',

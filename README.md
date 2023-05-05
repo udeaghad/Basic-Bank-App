@@ -43,6 +43,7 @@ To get a local copy up and running follow these simple steps.
   - JWT
   - RAVEN_SECRET 
   - ENVIRONMENT = test(Set this to run integraton testing)
+  - WEBHOOK_URL
 - Create your database and connect it on the knexfile.ts
   - Run `npm run createDB`
 - Run `npm run migrate` to migrate the table columns and their properties to your database

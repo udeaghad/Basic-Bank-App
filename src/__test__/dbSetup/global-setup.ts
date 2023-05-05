@@ -39,7 +39,7 @@ const createTestDatabase = async() => {
 // Seed the database with schema and data
 const seedTestDatabase = async() => {
   const knex = Knex({
-    client: 'mysql',
+    client: 'mysql2',
     connection: {
       database: database,
       user: process.env.DB_USER,

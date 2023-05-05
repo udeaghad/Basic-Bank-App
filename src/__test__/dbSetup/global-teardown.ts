@@ -9,7 +9,7 @@ const database = 'test_raven_db'
 
 const tearDownDatabase = async () => {
   const knex = Knex({
-    client: 'mysql',
+    client: 'mysql2',
     connection: {
       // database: process.env.DB_NAME,
       user: process.env.DB_USER,

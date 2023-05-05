@@ -2,48 +2,44 @@ import request from 'supertest';
 import Knex from 'knex';
 import app from '../../app';
 
+let accountNumber: string;
+let cookies: string[];
+
 
 describe('Transactions', () => {
-  
+  beforeAll(async() => {
+    
+    //Create an account to obtain account id
+    
+    const newAccunt = { 
+      name: 'James Brown', 
+          email: 'james20@example.com', 
+          password: '12345',
+          confirmPassword: '12345',              
+        }
+        await request(app).post('/api/v1/auths/account/create').send(newAccunt)
+        
+        //login
+        
+        const userLoginDetails = {
+          email: 'james20@example.com', 
+          password: '12345',
+        }
+        
+        const res= await request(app).post('/api/v1/auths/account/login').send(userLoginDetails)
+        
+        accountNumber = res.body.data.id
+        cookies = res.get('Set-Cookie')
+        
+      })
+      
+      
   afterAll(() => {
     let config = require('../../data/knexfile')
     let db = Knex(config.test)
     db.destroy()
   })
-    
-    let accountNumber: string;
-    let cookies: string[];
-    
-      beforeAll(async() => {
-    
-        //Create an account to obtain account id
-    
-        const newAccunt = { 
-          name: 'James Brown', 
-          email: 'james20@example.com', 
-          password: '12345',
-          confirmPassword: '12345',              
-        }
-          await request(app).post('/api/v1/auths/account/create').send(newAccunt)
-    
-        //login
-    
-         const userLoginDetails = {
-          email: 'james20@example.com', 
-          password: '12345',
-        }
-    
-        const res= await request(app).post('/api/v1/auths/account/login').send(userLoginDetails)
-    
-        accountNumber = res.body.data.id
-        cookies = res.get('Set-Cookie')
-        
-      })
-  
-  
-  
-  
-
+      
   describe('Receive Deposit', () => {
 
     it('should accept deposit successfully', async() => {
@@ -62,14 +58,14 @@ describe('Transactions', () => {
   
       const {statusCode, body} = await request(app)
                                   .post('/api/v1/accounts/deposit/receiveMoney')
-                                  .send(depositDetails)
                                   .set('Authorization', 'Bearer 12345')
-      
+                                  .send(depositDetails)
+             
       expect(statusCode).toBe(200)
       expect(body.status).toBe('Success')
       expect(body.message).toBe('Transactions Successful')
-      expect(body.data.deposit).toBe(2500)
-      expect(body.data.withdraw).toBe(0)
+      expect(body.data.deposit).toBe('2500.00')
+      expect(body.data.withdraw).toBe('0.00')
       expect(body.data.remarks).toBe('Deposit by self')
       expect(body.data.remarks).toBe('Deposit by self')
       expect(body.data.acct_id).toBe(accountNumber)
@@ -193,7 +189,7 @@ describe('Transactions', () => {
                                   .post('/api/v1/accounts/withdraw/sendMoney')
                                   .send(transferDetails)
                                   .set('Cookie', cookies)
-                                  
+                                 
       expect(statusCode).toBe(400)
       expect(body.status).toBe('fail')
       expect(body.message).toBe('Insufficient balance')
@@ -205,12 +201,12 @@ describe('Transactions', () => {
       it('Should get transaction details', async() => {
         const depositDetails = {
           id: accountNumber,
-          amount:"2500",
+          amount:"1500",
           remarks:"Deposit by self",
           bank_code: "044",
-          bank: "Fidelity bank",
+          bank: "Union bank",
           account_number: "0000809031",
-          account_name: "Chris Olodo",
+          account_name: "Meg Scoth",
           reference: "52546874",
           currency: "NGN"
         }
@@ -220,10 +216,17 @@ describe('Transactions', () => {
                                     .send(depositDetails)
                                     .set('Authorization', 'Bearer 12345')
 
+        
+
         const {statusCode, body} = await request(app)
-                                   .get(`/api/v1/accounts/${accountNumber}/transaction/${response.body.id}`)
+                                   .get(`/api/v1/accounts/${accountNumber}/transaction/${response.body.data.id}`)
                                    .set('Cookie', cookies)
+
+        
         expect(statusCode).toBe(200)
+        expect(body.data.deposit).toBe('1500.00')
+        expect(body.data.bank).toBe('Union bank')
+        expect(body.data.account_name).toBe('Meg Scoth')
 
       })
 
@@ -238,7 +241,8 @@ describe('Transactions', () => {
           account_name: "Chris Olodo",
           reference: "52546874",
           currency: "NGN",
-          created_at: "2023-01-01"
+          created_at: "2023-01-01T14:50:18.000Z",
+          updated_at: "2023-01-01T14:50:18.000Z"
         }
         const depositDetails2 = {
           id: accountNumber,
@@ -250,7 +254,8 @@ describe('Transactions', () => {
           account_name: "Chris Olodo",
           reference: "52546874",
           currency: "NGN",
-          created_at: "2023-02-01"
+          created_at: "2023-02-01",
+          updated_at: "2023-01-01"
         }
         const depositDetails3 = {
           id: accountNumber,
@@ -262,29 +267,30 @@ describe('Transactions', () => {
           account_name: "Chris Olodo",
           reference: "52546874",
           currency: "NGN",
-          created_at: "2023-03-01"
+          created_at: "2023-03-01",
+          updated_at: "2023-03-01"
         }
     
-        await request(app)
+       const res1 =  await request(app)
           .post('/api/v1/accounts/deposit/receiveMoney')
           .send(depositDetails1)
           .set('Authorization', 'Bearer 12345')
 
-        await request(app)
+        const res2 = await request(app)
           .post('/api/v1/accounts/deposit/receiveMoney')
           .send(depositDetails2)
           .set('Authorization', 'Bearer 12345')
 
-        await request(app)
+        const res3 = await request(app)
           .post('/api/v1/accounts/deposit/receiveMoney')
           .send(depositDetails3)
           .set('Authorization', 'Bearer 12345')
 
-
+     console.log(res1.body.data)
         const searchParam = {
           id: accountNumber,
-          startDate: '2023-01-01',
-          endDate: '2023-05-05'
+          startDate: '2023-02-01',
+          endDate: '2023-03-05'
         }
 
         const {statusCode, body} = await request(app)

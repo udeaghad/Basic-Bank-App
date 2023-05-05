@@ -6,7 +6,7 @@ import { createDepositTrxns, createWithdrawTrxns, getTransactionDetails, searchH
 import { IDeposit, IWithdraw } from '../interfaces/accountInterface';
 
 
-const webhookURL = 'https://webhook.site/95291e4d-e5c6-4470-9ee5-a8eeb460b347'
+const webhookURL = String(process.env.WEBHOOK_URL)
 
 export const receiveDeposit = async(req: Request, res: Response, next: NextFunction) => {
  
@@ -70,9 +70,9 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
   if(Number(req.cookies.access_token.id) !== Number(id)) return res.status(401).json({status: 'Unauthorized', message: 'You are not authorized performing transaction'})
   
   try {
-    const checkedAccountBalance: { balance: Number } = await checkBalance(id)
+    const checkedAccountBalance: { balance: number } = await checkBalance(id)
      
-    if(checkedAccountBalance.balance < amount ) return res.status(400).json({status: 'fail', message: 'Insufficient balance', data: null})
+    if(Number(checkedAccountBalance.balance) < Number(amount) ) return res.status(400).json({status: 'fail', message: 'Insufficient balance', data: null})
     
     const updatedBalance = await updateBalanceOnWithdraw(id, amount);
     
@@ -139,7 +139,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
         next(error)             
       });
 
-    axios.post(webhookURL, ravenResponse)
+    // axios.post(webhookURL, ravenResponse)
     res.status(200).json(ravenResponse)
 
   } catch (error) {
@@ -175,8 +175,8 @@ export const getTransaction = async(req: Request, res: Response, next: NextFunct
 
   try {
     const transaction = await getTransactionDetails(trxns_id)
-
-    res.status(200).json({status: 'Success', message: 'Transaction Successfull', data: transaction})
+   
+    res.status(200).json({status: 'Success', message: 'Transaction Successfull1', data: transaction})
     
   } catch (error) {
     next(error)

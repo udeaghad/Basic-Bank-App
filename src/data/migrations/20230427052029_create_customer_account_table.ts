@@ -22,8 +22,8 @@ export async function up(knex: Knex): Promise<void> {
         .specificType('acct_id', 'INT(10) ZEROFILL')
         .references('id')
         .inTable('accts')
-        table.timestamp('created_at').defaultTo(knex.fn.now())
-        table.timestamp('updated_at').defaultTo(knex.fn.now())
+      table.timestamp('created_at').defaultTo(knex.fn.now())
+      table.timestamp('updated_at').defaultTo(knex.fn.now())
     })
 }
 

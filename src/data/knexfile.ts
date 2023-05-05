@@ -23,7 +23,7 @@ const config: { [key: string]: Knex.Config } = {
   },
 
   test: {
-    client: "mysql",
+    client: "mysql2",
     connection: {
       database: 'test_raven_db',
       user: process.env.DB_USER,

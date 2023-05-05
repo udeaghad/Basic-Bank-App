@@ -139,7 +139,7 @@ export const sendMoney = async(req: Request, res: Response, next: NextFunction) 
         next(error)             
       });
 
-    // axios.post(webhookURL, ravenResponse)
+    axios.post(webhookURL, ravenResponse)
     res.status(200).json(ravenResponse)
 
   } catch (error) {

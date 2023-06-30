@@ -1,13 +1,13 @@
-## RavenPayTest🏩
+## Basic Bank App🏩
 Introducing our fantastic payment app! With our user-friendly interface, you can easily accept fund transfers from other banks and send transfers to any bank you desire. Our cutting-edge technology is powered by RavenPay API terminal, enabling seamless interconnectivity.
 
-This amazing product is specifically designed to handle all your basic payment needs, from the transfer of funds to receiving them and checking your transaction details and history. With our secure and reliable system, you can be assured of a hassle-free payment experience.
+This fantastic product is specifically designed to handle all your basic payment needs, from transferring funds to receiving them and checking your transaction details and history. With our secure and reliable system, you can be assured of a hassle-free payment experience.
 ## Project Documentation 📄
 
  - [API Documentation](https://documenter.getpostman.com/view/22522406/2s93eSZF1B)
 
 ## Built With 🛠️
-- Programming Langiages: TypeScript and JavaScript
+- Programming Languages: TypeScript and JavaScript
 - Frameworks: Node.js, Express.js
 - Database: MySql and Knex
 - Git and GitHub
